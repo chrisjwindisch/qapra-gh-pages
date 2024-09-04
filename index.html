@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Status Page</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
+    body {
+      background-color: black;
+      font-family: 'Roboto Mono', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .status-box {
+      background-color: white;
+      border: 2px solid #ccc;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      max-width: 300px;
+      width: 100%;
+    }
+
+    .status {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .status-ok {
+      color: green;
+    }
+
+    .status-down {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="status-box">
+    <div id="statusMessage" class="status">Checking status...</div>
+  </div>
+
+  <script>
+    async function checkStatus() {
+      const statusMessageElement = document.getElementById('statusMessage');
+      try {
+        const response = await fetch('https://app.qapra.ai/site-status', { timeout: 5000 });
+        const returnedJson = await response.json();
+
+        if (returnedJson.status === 'down') {
+          statusMessageElement.textContent = 'qapra is down';
+          statusMessageElement.classList.add('status-down');
+        } else {
+          statusMessageElement.textContent = 'qapra is up';
+          statusMessageElement.classList.add('status-ok');
+        }
+      } catch (error) {
+        statusMessageElement.textContent = 'qapra is down';
+        statusMessageElement.classList.add('status-down');
+      }
+    }
+
+    checkStatus();
+  </script>
+</body>
+</html>
